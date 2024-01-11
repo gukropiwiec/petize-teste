@@ -9,6 +9,7 @@ import { lastValueFrom } from 'rxjs';
 import { IGetPessoasResponse } from '../../interfaces/getpessoasresponse.interface';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSort, MatSortModule } from '@angular/material/sort';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -29,7 +30,7 @@ export class HomeComponent implements OnInit {
   currentNome = '';
   currentSexo = '';
   currentIdade = '';
-  constructor(private httpService: HttpService<IGetPessoasResponse>) {}
+  constructor(private httpService: HttpService<IGetPessoasResponse>, private router: Router) {}
 
   ngOnInit(): void {
     this.getData(this.page);
@@ -57,6 +58,6 @@ export class HomeComponent implements OnInit {
   }
 
   openPessoaId(id: number) {
-    console.log(id)
+    this.router.navigateByUrl(`/${id}`)
   }
 }
