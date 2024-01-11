@@ -1,0 +1,44 @@
+.img-size {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.img-wrapper {
+    padding: 10px;
+}
+
+.mat-elevation-z8 {    
+    overflow-x: auto;
+}
+
+.c-id {
+    min-width: 75px;
+}
+
+.c-nome {
+    min-width: 250px;
+}
+
+.c-idade {
+    min-width: 85px;
+}
+
+.c-sexo {
+    min-width: 130px;
+}
+
+.c-foto {
+    min-width: 130px;
+}
+
+.mat-mdc-row .mat-mdc-cell {
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+    cursor: pointer;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+    border-color: black;
+}

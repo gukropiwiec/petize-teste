@@ -3,10 +3,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatDividerModule } from '@angular/material/divider';
-import { HttpService } from '../services/http.service';
-import { IPessoa } from '../interfaces/pessoa.interface';
+import { HttpService } from '../../services/http.service';
+import { IPessoa } from '../../interfaces/pessoa.interface';
 import { lastValueFrom } from 'rxjs';
-import { IGetPessoasResponse } from '../interfaces/getpessoasresponse.interface';
+import { IGetPessoasResponse } from '../../interfaces/getpessoasresponse.interface';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 
@@ -28,20 +28,22 @@ export class HomeComponent implements OnInit {
   totalPages = 0;
   currentNome = '';
   currentSexo = '';
+  currentIdade = '';
   constructor(private httpService: HttpService<IGetPessoasResponse>) {}
 
   ngOnInit(): void {
     this.getData(this.page);
   }
 
-  async getData(page: number, nome = '', sexo = '') {
-    if (nome) {
-      this.currentNome = nome;
+  async getData(page: number, nome = '', sexo = '', idade = '') {
+    this.currentNome = nome;
+    if (sexo == 'NONE') {
+      this.currentSexo = ''
     }
-    if (sexo) {
-      this.currentSexo = sexo;
-    }
-    const getPessoasEndpoint = `aberto/filtro?faixaIdadeFinal=0&faixaIdadeInicial=0&nome=${this.currentNome}&porPagina=12&sexo=${this.currentSexo}&status=DESAPARECIDO&pagina=${page}`;
+    this.currentSexo = sexo;
+    this.currentIdade = idade;
+    console.log(this.currentNome)
+    const getPessoasEndpoint = `aberto/filtro?faixaIdadeFinal=${this.currentIdade}&faixaIdadeInicial=${this.currentIdade}&nome=${this.currentNome}&porPagina=12&sexo=${this.currentSexo}&status=DESAPARECIDO&pagina=${page}`;
     const response = await lastValueFrom(this.httpService.get(getPessoasEndpoint));
     console.log(response);
     this.dataSource = new MatTableDataSource(response.content);
@@ -52,5 +54,9 @@ export class HomeComponent implements OnInit {
 
   changePage(event: any) {
     this.getData(event.target.value);
+  }
+
+  openPessoaId(id: number) {
+    console.log(id)
   }
 }
