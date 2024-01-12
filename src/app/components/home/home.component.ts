@@ -30,6 +30,7 @@ export class HomeComponent implements OnInit {
   currentNome = '';
   currentSexo = '';
   currentIdade = '';
+  loading = true;
   constructor(private httpService: HttpService<IGetPessoasResponse>, private router: Router) {}
 
   ngOnInit(): void {
@@ -37,20 +38,27 @@ export class HomeComponent implements OnInit {
   }
 
   async getData(page: number, nome = '', sexo = '', idade = '') {
-    this.currentNome = nome;
-    if (sexo == 'NONE') {
-      this.currentSexo = ''
+    this.loading = true
+    try {
+      this.currentNome = nome;
+      if (sexo == 'NONE') {
+        this.currentSexo = ''
+      }
+      this.currentSexo = sexo;
+      this.currentIdade = idade;
+      console.log(this.currentNome)
+      const getPessoasEndpoint = `aberto/filtro?faixaIdadeFinal=${this.currentIdade}&faixaIdadeInicial=${this.currentIdade}&nome=${this.currentNome}&porPagina=12&sexo=${this.currentSexo}&status=DESAPARECIDO&pagina=${page}`;
+      const response = await lastValueFrom(this.httpService.get(getPessoasEndpoint));
+      console.log(response);
+      this.dataSource = new MatTableDataSource(response.content);
+      this.totalPages = response.totalPages;
+      this.page = response.pageable.pageNumber;
+      this.dataSource.sort = this.sort;
+      this.loading = false
+    } catch (error: any) {
+      console.log(error.error)
+      this.loading = false
     }
-    this.currentSexo = sexo;
-    this.currentIdade = idade;
-    console.log(this.currentNome)
-    const getPessoasEndpoint = `aberto/filtro?faixaIdadeFinal=${this.currentIdade}&faixaIdadeInicial=${this.currentIdade}&nome=${this.currentNome}&porPagina=12&sexo=${this.currentSexo}&status=DESAPARECIDO&pagina=${page}`;
-    const response = await lastValueFrom(this.httpService.get(getPessoasEndpoint));
-    console.log(response);
-    this.dataSource = new MatTableDataSource(response.content);
-    this.totalPages = response.totalPages;
-    this.page = response.pageable.pageNumber;
-    this.dataSource.sort = this.sort;
   }
 
   changePage(event: any) {

@@ -29,44 +29,60 @@
         </div>
     </div>
     <div class="mat-elevation-z8">
-        <mat-table [dataSource]="dataSource" matSort>
-            <ng-container matColumnDef="id">
-                <mat-header-cell *matHeaderCellDef mat-sort-header class="c-id"> ID </mat-header-cell>
-                <mat-cell *matCellDef="let row" class="c-id"> {{row.id}} </mat-cell>
-            </ng-container>
-    
-            <ng-container matColumnDef="nome">
-                <mat-header-cell *matHeaderCellDef mat-sort-header class="c-nome"> Nome </mat-header-cell>
-                <mat-cell *matCellDef="let row" class="c-nome"> {{row.nome}} </mat-cell>
-            </ng-container>
-    
-            <ng-container matColumnDef="idade">
-                <mat-header-cell *matHeaderCellDef mat-sort-header class="c-idade"> Idade </mat-header-cell>
-                <mat-cell *matCellDef="let row" class="c-idade"> {{row.idade}} </mat-cell>
-            </ng-container>
-    
-            <ng-container matColumnDef="sexo">
-                <mat-header-cell *matHeaderCellDef mat-sort-header class="c-sexo"> Sexo </mat-header-cell>
-                <mat-cell *matCellDef="let row" class="c-sexo"> {{row.sexo}} </mat-cell>
-            </ng-container>
-    
-            <ng-container matColumnDef="urlFoto">
-                <mat-header-cell *matHeaderCellDef mat-sort-header class="c-foto"> Foto </mat-header-cell>
-                <mat-cell *matCellDef="let row" class="c-foto"> 
-                    <div class="img-wrapper">
-                        <img src="{{ row.urlFoto || 'assets/anon.png' }}" class="img-size"> 
-                    </div> 
-                </mat-cell>
-            </ng-container>
+        @if (!loading) {
+            @if (dataSource.data.length > 0) {
+                <mat-table [dataSource]="dataSource" matSort>
+                    <ng-container matColumnDef="id">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header class="c-id"> ID </mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="c-id"> {{row.id}} </mat-cell>
+                    </ng-container>
             
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openPessoaId(row.id)">
-            </mat-row>
-        </mat-table>
+                    <ng-container matColumnDef="nome">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header class="c-nome"> Nome </mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="c-nome"> {{row.nome}} </mat-cell>
+                    </ng-container>
+            
+                    <ng-container matColumnDef="idade">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header class="c-idade"> Idade </mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="c-idade"> {{row.idade}} </mat-cell>
+                    </ng-container>
+            
+                    <ng-container matColumnDef="sexo">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header class="c-sexo"> Sexo </mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="c-sexo"> {{row.sexo}} </mat-cell>
+                    </ng-container>
+            
+                    <ng-container matColumnDef="urlFoto">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header class="c-foto"> Foto </mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="c-foto"> 
+                            <div class="img-wrapper">
+                                <img src="{{ row.urlFoto || 'assets/anon.png' }}" class="img-size"> 
+                            </div> 
+                        </mat-cell>
+                    </ng-container>
+                    
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openPessoaId(row.id)">
+                    </mat-row>
+                </mat-table>
+            }
+            @else {
+                <h2 class="text-center p-5 mb-0">Sem dados para exibir</h2>
+            }
+        }
+        @else {
+            <div class="row text-center mw-100 p-5">
+                <div class="col">
+                    <div class="spinner-grow text-secondary" role="status" style="width: 3rem; height: 3rem;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
     <mat-divider></mat-divider>
     <div class="my-5 row g-3">
-        <div class="col">
+        <div class="col align-self-center">
             Página {{ page + 1 }} de {{ totalPages }}
         </div>
         <div class="col">
